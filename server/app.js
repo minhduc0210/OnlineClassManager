@@ -7,6 +7,9 @@ const cors = require("cors");
 const hostname = process.env.HOSTNAME
 const port = process.env.PORT
 
+//Connect to database
+require("./database_connection/DbConnection");
+
 //App settings
 const app = express();
 app.use(express.json());
