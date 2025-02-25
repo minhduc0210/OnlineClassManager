@@ -1,19 +1,23 @@
 //Import
-const express = require('express');
-require("dotenv").config();
-const cors = require("cors");
+const express = require('express')
+require("dotenv").config()
+const cors = require("cors")
+
+//App settings
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 
 //Get env
 const hostname = process.env.HOSTNAME
 const port = process.env.PORT
 
 //Connect to database
-require("./database_connection/DbConnection");
+require("./database_connection/DbConnection")
 
-//App settings
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//Router
+const router = require("./routers");
+app.use("/", router);
 
 //Run server
 app.listen(port, hostname, () => {
