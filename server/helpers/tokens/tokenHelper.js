@@ -1,5 +1,5 @@
 const { sign } = require("jsonwebtoken");
-const RefreshToken = require("../../models/RefreshToken");
+const RefreshToken = require("../../models/RefreshToken")
 const CustomError = require("../errors/CustomError");
 
 const {
