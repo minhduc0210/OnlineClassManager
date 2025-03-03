@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
-    minlength: 3,
+    minlength: 2,
   },
   lastname: {
     type: String,
@@ -32,6 +32,6 @@ const UserSchema = new Schema({
   },
 });
 
-const User = mongoose.model("User", UserSchema, "User");
+const User = mongoose.model("User", UserSchema, "users");
 
 module.exports = User;
