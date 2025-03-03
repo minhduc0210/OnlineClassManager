@@ -4,11 +4,12 @@ const newUser = () => {
   return [
     body("name", "Name is required")
       .isLength({ min: 2 })
-      .withMessage("Name must be minumum 2 character")
+      .withMessage("Name must be minumum of 2 characters")
       .exists()
       .trim(),
-    body("lastname", "Lastname is required")
+    body("lastname", "LastName is required")
       .isLength({ min: 2 })
+      .withMessage("Lastname must be minumum of 2 characters")
       .exists()
       .trim(),
     body("role", "Role is required").exists(),

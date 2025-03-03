@@ -8,10 +8,12 @@ import {
     ToggleButton,
     Alert,
     ToggleButtonGroup,
-} from "react-bootstrap";
-import { registerValidation } from "../../validations";
-import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+} from "react-bootstrap"
+import { registerValidation } from "../../validations"
+import { useFormik } from "formik"
+import { useNavigate } from "react-router-dom"
+import { fetchRegister } from "../../services/AuthService"
+import { toast } from "react-toastify"
 
 const Register = () => {
     const navigate = useNavigate();
@@ -27,9 +29,23 @@ const Register = () => {
         validationSchema: registerValidation,
         onSubmit: async (values, bag) => {
             try {
-                console.log("Form submitted")
+                const response = await fetchRegister(values);
+                if (response.status === 201) {
+                    toast.success("Register successfully!");
+                    navigate("/")
+                  }
             } catch (err) {
-                bag.setErrors({ general: err.response.data.message });
+                console.log(err)
+                if (err.response && err.response.data.errors) {
+                    const errorsArray = err.response.data.errors;
+                    const errors = {}
+        
+                    errorsArray.forEach(error => {
+                        errors[error.path] = error.msg;
+                    });
+        
+                    bag.setErrors(errors)
+                }
             }
         },
     });
@@ -56,7 +72,7 @@ const Register = () => {
 
                 <Form onSubmit={formik.handleSubmit}>
                     <Col md={{ span: 6, offset: 3 }}>
-                        <FloatingLabel label="Name" className="mb-3">
+                        <FloatingLabel label="First Name" className="mb-3">
                             <Form.Control
                                 onChange={formik.handleChange}
                                 onBlur={formik.onBlur}
@@ -160,4 +176,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default Register

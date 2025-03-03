@@ -2,11 +2,19 @@
 const express = require('express')
 require("dotenv").config()
 const cors = require("cors")
+const cookieParser = require("cookie-parser");
 
 //App settings
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 //Get env
 const hostname = process.env.HOSTNAME

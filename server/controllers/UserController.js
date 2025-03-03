@@ -14,30 +14,44 @@ const {
 const RefreshToken = require("../models/RefreshToken");
 
 const register = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
-  if (user) {
-    return next(new CustomError("Email already use", 400));
-  }
+    const user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ 
+        errors: [{ path: "email", msg: "Email already in use" }] 
+      });
+    }
 
-  const validationErrors = validationResult(req).array();
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return res.status(400).json({
+        errors: validationErrors.array(),
+      });
+    }
 
-  if (validationErrors.length > 1) {
-    return res.status(400).json({
-      errors: validationErrors,
+    const hashedPassword = await hash(password, 10);
+    const newUser = await User.create({ ...req.body, password: hashedPassword });
+
+    return res.status(201).json({
+      message: "User Created",
+      user: newUser,
     });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const errors = Object.keys(error.errors).map((key) => ({
+        path: key,
+        msg: error.errors[key].message,
+      }));
+      return res.status(400).json({ errors });
+    }
+
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-
-  const hashedPassword = await hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashedPassword });
-
-  return res.status(201).json({
-    message: "User Created",
-    user: newUser,
-  });
 });
+
 
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
