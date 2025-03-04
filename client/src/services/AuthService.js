@@ -36,6 +36,23 @@ api.interceptors.request.use(
 );
 
 export const fetchRegister = async (inputs) => {
-    const result = await axios.post(`${BASE_URL}/users/register`, inputs)
+  const result = await axios.post(`${BASE_URL}/users/register`, inputs)
+  return result;
+};
+
+export const fetchLogin = async (inputs) => {
+  const result = await axios.post(`${BASE_URL}/users/login`, inputs);
+  return result;
+};
+
+export const fetchUser = async () => {
+  const result = await api.get(`${BASE_URL}/users/loggedUser`);
+  return result;
+};
+
+export const fetchLogout = async (userID) => {
+  if (userID !== undefined) {
+    const result = await axios.get(`${BASE_URL}/users/logout/${userID}`);
     return result;
-  };
+  }
+};

@@ -32,7 +32,7 @@ const Register = () => {
                 const response = await fetchRegister(values);
                 if (response.status === 201) {
                     toast.success("Register successfully!");
-                    navigate("/")
+                    navigate("/login")
                   }
             } catch (err) {
                 console.log(err)
