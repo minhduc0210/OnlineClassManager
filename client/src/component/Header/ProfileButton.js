@@ -6,6 +6,8 @@ import { IoAddCircleSharp, IoSchoolSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { fetchUser } from "../../services/AuthService";
+import StudentModal from "../Modals/StudentModal";
+import TeacherModal from "../Modals/TeacherModal";
 
 const ProfileButton = () => {
   const [showPopover, setShowPopover] = useState(false);
@@ -58,7 +60,7 @@ const ProfileButton = () => {
             <IoAddCircleSharp className="me-2" />
             Enter the classroom
           </Button>
-
+          <StudentModal show={modalShow} onHide={() => setModalShow(false)} />
         </>
       ) : (
         <>
@@ -70,7 +72,7 @@ const ProfileButton = () => {
             <IoSchoolSharp className="me-2" />
             Create Classroom
           </Button>
-
+          <TeacherModal show={modalShow} onHide={() => setModalShow(false)} />
         </>
       )}
       <Button

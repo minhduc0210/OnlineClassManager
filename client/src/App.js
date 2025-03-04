@@ -11,6 +11,7 @@ import Home from "./pages/home/Home";
 import Header from "./component/Header/Header";
 import Footer from "./component/Footer/Footer";
 import { useContext } from "react";
+import Classroom from "./pages/classroom/Classroom";
 
 function App() {
   const { isLoggin } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={isLoggin ? <Home /> : <WelcomePage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/classroom/:classroomID" element={<Classroom />} />
         </Routes>
         <Footer />
       </BrowserRouter>
