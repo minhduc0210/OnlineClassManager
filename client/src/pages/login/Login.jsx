@@ -39,8 +39,6 @@ const Login = () => {
                     navigate("/");
                 }
             } catch (err) {
-                console.log(err);
-
                 if (err.response && err.response.data.errors) {
                     const errorsArray = err.response.data.errors;
                     if (errorsArray.length === 1 && errorsArray[0].msg === "Incorrect email or password") {
