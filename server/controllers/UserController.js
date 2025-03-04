@@ -16,14 +16,12 @@ const RefreshToken = require("../models/RefreshToken");
 const register = asyncHandler(async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (user) {
-      return res.status(400).json({ 
-        errors: [{ path: "email", msg: "Email already in use" }] 
+      return res.status(400).json({
+        errors: [{ path: "email", msg: "Email already in use" }]
       });
     }
-
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
       return res.status(400).json({
@@ -54,34 +52,42 @@ const register = asyncHandler(async (req, res, next) => {
 
 
 const login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
-  let user = await User.findOne({ email });
-  if (!user) return next(new CustomError("User not found", 400));
-  const valid = await compare(password, user.password);
-  if (!valid) return next(new CustomError("Password not correct", 400));
+  try {
+    const { email, password } = req.body;
+    let user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ errors: [{ msg: "Incorrect email or password" }] });
+    const valid = await compare(password, user.password);
+    if (!valid) return res.status(401).json({ errors: [{ msg: "Incorrect email or password" }] });
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
+    user.save();
+    await saveRefreshToken(user._id, refreshToken);
+    return res.status(200).json({
+      id: user._id,
+      name: user.name,
+      lastname: user.lastname,
+      email: user.email,
+      role: user.role,
+      accessToken,
+      refreshToken,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" })
+  }
 
-  const accessToken = createAccessToken(user);
-  const refreshToken = createRefreshToken(user);
-
-  user.save();
-  await saveRefreshToken(user._id, refreshToken);
-  return res.status(200).json({
-    id: user._id,
-    name: user.name,
-    lastname: user.lastname,
-    email: user.email,
-    role: user.role,
-    accessToken,
-    refreshToken,
-  });
 });
 
 const logout = asyncHandler(async (req, res, next) => {
-  const { userID } = req.params;
-  await deleteRefreshToken(userID);
-  return res.status(200).json({
-    success: true,
-  });
+  try {
+    const { userID } = req.params;
+    await deleteRefreshToken(userID);
+    return res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" })
+  }
+
 });
 
 const refreshToken = asyncHandler(async (req, res, next) => {
