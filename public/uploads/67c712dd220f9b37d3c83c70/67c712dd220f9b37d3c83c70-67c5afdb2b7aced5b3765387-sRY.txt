@@ -1,0 +1,195 @@
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, TextInput, FlatList, Modal, Dimensions } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const numColumns = 3;
+const screenWidth = Dimensions.get('window').width;
+const imageSize = screenWidth / numColumns - 20;
+
+const App = () => {
+  const [images, setImages] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [note, setNote] = useState('');
+  const [tempImage, setTempImage] = useState(null);
+  const [noteModalVisible, setNoteModalVisible] = useState(false);
+
+  useEffect(() => {
+    loadImages();
+  }, []);
+
+  const loadImages = async () => {
+    const storedImages = await AsyncStorage.getItem('images');
+    if (storedImages) {
+      setImages(JSON.parse(storedImages));
+    }
+  };
+
+  const saveImages = async (newImages) => {
+    await AsyncStorage.setItem('images', JSON.stringify(newImages));
+  };
+
+  const captureImage = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      alert('Camera access is required!');
+      return;
+    }
+    
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing: true,
+    });
+
+    if (!result.canceled) {
+      setTempImage(result.assets[0].uri);
+      setNoteModalVisible(true);
+    }
+  };
+
+  const saveImageWithNote = () => {
+    if (tempImage) {
+      const newImage = { uri: tempImage, note: note || '' };
+      const updatedImages = [...images, newImage];
+      setImages(updatedImages);
+      saveImages(updatedImages);
+      setTempImage(null);
+      setNoteModalVisible(false);
+    }
+  };
+
+  const chooseFile = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing: true,
+    });
+    
+    if (!result.canceled) {
+      setTempImage(result.assets[0].uri);
+      setNoteModalVisible(true);
+    }
+  };
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Text style={styles.titleText}>Image Picker with Notes</Text>
+      <View style={styles.container}>
+        <TouchableOpacity activeOpacity={0.5} style={styles.buttonStyle} onPress={captureImage}>
+          <Text style={styles.textStyle}>Capture Image</Text>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} style={styles.buttonStyle} onPress={chooseFile}>
+          <Text style={styles.textStyle}>Choose Image</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={images}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={numColumns}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => { setSelectedImage(item); setModalVisible(true); }} style={styles.imageWrapper}>
+              <Image source={{ uri: item.uri }} style={styles.imageStyle} />
+              {item.note ? <Text style={styles.textStyle}>{item.note}</Text> : null}
+            </TouchableOpacity>
+          )}
+          columnWrapperStyle={styles.row}
+        />
+      </View>
+      <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+        <View style={styles.modalContainer}>
+          {selectedImage && (
+            <>
+              <Image source={{ uri: selectedImage.uri }} style={styles.fullImage} />
+            </>
+          )}
+          <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.buttonStyle}>
+            <Text style={styles.textStyle}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal visible={noteModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter a note (optional)"
+            value={note}
+            onChangeText={setNote}
+          />
+          <TouchableOpacity onPress={saveImageWithNote} style={styles.buttonStyle}>
+            <Text style={styles.textStyle}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </SafeAreaView>
+  );
+};
+
+export default App;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingVertical: 20,
+  },
+  textStyle: {
+    padding: 5,
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 12,
+  },
+  buttonStyle: {
+    alignItems: 'center',
+    backgroundColor: '#DDDDDD',
+    padding: 10,
+    marginVertical: 10,
+    width: '80%',
+    borderRadius: 5,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  imageWrapper: {
+    alignItems: 'center',
+    margin: 5,
+    width: imageSize,
+  },
+  imageStyle: {
+    width: imageSize,
+    height: imageSize,
+    marginBottom: 5,
+    borderRadius: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    width: '80%',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    backgroundColor: 'white',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
+  fullImage: {
+    width: '90%',
+    height: 300,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+});

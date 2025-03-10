@@ -1,0 +1,306 @@
+Web: Hỗ trợ học tập liên quan đến lập trình
+
+Quy mô:
+- Giai đoạn đầu: Tập trung vào sinh viên và người học lập trình ở Việt Nam.
+- Giai đoạn mở rộng: Mở rộng ra quốc tế và hỗ trợ nhiều ngôn ngữ lập trình hơn.
+
+Sản phẩm: Các tính năng chính
+- Đăng bài tập và yêu cầu giải: Người dùng (sinh viên, học viên) có thể đăng bài tập lập trình cần hỗ trợ
+- Tìm người code thuê: Người cần thuê lập trình viên có thể đăng dự án nhỏ (mini-projects), bài tập phức tạp hoặc các yêu cầu về phát triển ứng dụng/website
+- Đánh giá và xếp hạng: Người thuê có thể đánh giá sau khi hoàn thành công việc
+- Thanh toán an toàn
+
+Kênh bán:
+- Trực tuyến:
++ Website chính thức và ứng dụng di động.
+- Quảng bá:
++ Quảng cáo trên các nhóm học tập, diễn đàn lập trình, và mạng xã hội (Facebook, Tiktok, Insta).
++ Hợp tác với các trường đại học, trung tâm đào tạo lập trình để giới thiệu dịch vụ.
+
+Đối tượng:
+- Người cần giải bài tập:
+Sinh viên ngành CNTT, lập trình viên mới học, hoặc người tự học gặp khó khăn trong bài tập lập trình.
+- Người code thuê:
+Lập trình viên tự do (freelancer), sinh viên giỏi lập trình muốn kiếm thêm thu nhập, hoặc các lập trình viên có kinh nghiệm.
+
+Lý do chọn:
+- Nhu cầu lớn: Lập trình là kỹ năng ngày càng phổ biến, nhưng không phải ai cũng có thể tự học hiệu quả hoặc hoàn thành bài tập đúng hạn.
+- Tạo cơ hội thu nhập: Website giúp lập trình viên kiếm thêm thu nhập và xây dựng hồ sơ năng lực thực tế.
+
+/////
+Web: Kết nối chuyên gia viết CV và người cần việc
+
+Quy mô:
+- Giai đoạn đầu: Triển khai nền tảng trực tuyến tại đại học FPT, tập trung vào sinh viên chuyển bị tốt nghiệp hoặc chuẩn bị thực tập
+- Giai đoạn mở rộng: Hỗ trợ cho sinh viên trên cả nước.
+
+Sản phẩm: Các tinh năng chính
+- Kết nối khách hàng với chuyên gia viết CV:
++ Người cần hỗ trợ viết CV hoặc hồ sơ xin việc đăng yêu cầu trên nền tảng (ngành nghề, cấp bậc, ngôn ngữ, ngân sách).
++ Chuyên gia viết CV có thể chào giá và gửi hồ sơ năng lực của mình để khách hàng lựa chọn.
+- Dịch vụ đa dạng:
++ Viết CV cá nhân hóa: Theo ngành nghề, yêu cầu của khách hàng.
++ Viết thư xin việc (Cover Letter).
++ Tối ưu hồ sơ LinkedIn.
++ Tư vấn phỏng vấn: Kết nối với chuyên gia phỏng vấn qua video call.
+- Tính năng đánh giá và xếp hạng:
++ Khách hàng đánh giá và nhận xét về chất lượng dịch vụ của chuyên gia.
++ Hệ thống xếp hạng giúp người dùng dễ dàng tìm được chuyên gia phù hợp.
+- Tích hợp thanh toán an toàn
+
+Kênh bán:
+- Website chính thức:
++ Nền tảng giao dịch và kết nối chính giữa khách hàng và chuyên gia.
+- Quảng bá trên mạng xã hội:
++ Facebook, LinkedIn, Instagram để tiếp cận người dùng.
++ Chạy quảng cáo tập trung vào nhóm sinh viên, người tìm việc.
+
+Đối tượng:
+- Người cần viết CV: Sinh viên, người mới ra trường, người chuyển ngành hoặc tìm kiếm cơ hội việc làm quốc tế.
+- Chuyên gia viết CV: Freelancers, giảng viên hướng nghiệp, hoặc những người có kinh nghiệm trong lĩnh vực nhân sự và viết lách chuyên nghiệp.
+
+Lý do chọn:
+- Nhu cầu thực tiễn cao:
+Viết CV và hồ sơ xin việc đúng chuẩn là một thách thức đối với nhiều người, đặc biệt là sinh viên hoặc người đổi ngành.
+- Tính khả thi cao:
+Dễ dàng mở rộng mô hình với tính năng mới như tư vấn nghề nghiệp, khóa học viết CV, hoặc phỏng vấn thử.
+- Thị trường lớn:
+Nhu cầu viết CV và hồ sơ chuyên nghiệp ngày càng tăng, đặc biệt trong thị trường lao động cạnh tranh.
+
+////
+Web: Kết nối học viên với gia sư trực tuyến
+
+Quy mô:
+- Giai đoạn đầu: Hoạt động tại đại học FPT, tập trung vào sinh viên cần học thêm các kỹ năng cụ thể.
+- Giai đoạn mở rộng: Hỗ trợ học viên trên cả nước, mở rộng lĩnh vực giảng dạy.
+
+Sản phẩm:
+- Kết nối học viên và gia sư:
++ Học viên đăng yêu cầu học tập (môn học, cấp độ, mục tiêu, thời gian, ngân sách).
++ Gia sư gửi hồ sơ năng lực và mức giá đề xuất để học viên lựa chọn.
+- Học theo yêu cầu:
++ Hỗ trợ đa dạng môn học
++ Các khóa học kỹ năng mềm
+- Đánh giá và xếp hạng
++ Học viên đánh giá chất lượng dạy của gia sư sau mỗi buổi học.
++ Hệ thống xếp hạng giúp học viên tìm gia sư phù hợp nhanh chóng.
+- Thanh toán linh hoạt và an toàn
+
+Kênh bán:
+- Website và ứng dụng:
+Nền tảng chính để kết nối học viên và gia sư, tổ chức các buổi học trực tuyến.
+- Quảng bá qua mạng xã hội:
++ Quảng cáo trên Facebook, TikTok, Instagram.
++ Tạo nội dung chia sẻ mẹo học tập, kinh nghiệm dạy và học để thu hút người dùng.
+
+Đối tượng:
+- Học viên: Học sinh, sinh viên cần cải thiện kiến thức môn học hoặc chuẩn bị cho các kỳ thi.
+- Gia sư: Giáo viên, sinh viên giỏi, hoặc chuyên gia có kỹ năng chuyên môn muốn kiếm thêm thu nhập.
+
+Lý do chọn:
+- Nhu cầu lớn:
+Học trực tuyến ngày càng phổ biến, đặc biệt sau đại dịch, khi mọi người đã quen với hình thức học từ xa.
+Nhiều người cần học cá nhân hóa theo nhu cầu mà các lớp học truyền thống không đáp ứng được.
+- Thị trường bền vững:
+Giáo dục luôn là lĩnh vực có nhu cầu ổn định và lâu dài.
+
+
+////
+Tên idea: Nền tảng tìm việc làm thêm cho sinh viên
+
+Quy mô:
+- Giai đoạn đầu: Triển khai ở đại học FPT Hà Nội với đối tượng chính là sinh viên trường.
+- Giai đoạn mở rộng: Triển khai ở các đại học khác trên toàn quốc với thêm nhiều tính năng.
+
+Sản phẩm: Các tính năng chính
+- Danh sách công việc:
++ Công việc part-time, freelance, thực tập, và các dự án ngắn hạn.
++ Bộ lọc tìm kiếm thông minh theo ngành nghề, mức lương, địa điểm, và thời gian.
+- Hồ sơ cá nhân:
++ Sinh viên có thể tạo hồ sơ trực tuyến, liệt kê kỹ năng, kinh nghiệm và mục tiêu nghề nghiệp.
++ Nhà tuyển dụng xem hồ sơ và liên hệ trực tiếp.
+- Hỗ trợ kết nối:
++ Tính năng chat trực tuyến giữa sinh viên và nhà tuyển dụng.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng di động.
+- Quảng cáo trực tuyến: Facebook, Instagram, TikTok để tiếp cận sinh viên.
+
+Đối tượng:
+- Sinh viên: Sinh viên đại học, cao đẳng cần việc làm thêm để trang trải chi phí hoặc tích lũy kinh nghiệm.
+- Nhà tuyển dụng: Các doanh nghiệp nhỏ, startup, hoặc cá nhân cần nhân sự linh hoạt cho công việc bán thời gian hoặc dự án ngắn hạn.
+
+Lý do chọn:
+- Nhu cầu lớn:
++ Sinh viên luôn tìm kiếm công việc linh hoạt để có thêm thu nhập và kinh nghiệm thực tế.
++ Các doanh nghiệp vừa và nhỏ cần nhân sự thời vụ hoặc làm việc bán thời gian.
+- Thị trường tiềm năng: Việt Nam có hơn 2 triệu sinh viên đại học và cao đẳng, là nguồn lao động trẻ dồi dào.
+
+
+/////
+Tên idea: Nền tảng trao đổi và bán đồ cũ cho sinh viên
+
+Quy mô:
++ Triển khai ở đại học FPT Hà Nội trong thời gian đầu với đối tượng chính là sinh viên trường.
++ Mở rộng ra các trường đại học khác vào giai đoạn sau.
+
+Sản phẩm: Các tính năng chính
+- Đăng bán/trao đổi đồ cũ: Sách vở, laptop, dụng cụ học tập, quần áo, đồ điện tử.
+- Tìm kiếm: tìm sản phẩm nhanh chóng với bộ lọc theo danh mục và giá.
+- Hệ thống chat trực tiếp: Kết nối người mua và người bán.
+- Giao dịch an toàn: Tích hợp thanh toán và vận chuyển qua đối tác.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng di động.
+- Quảng cáo trên mạng xã hội (Facebook, Instagram, TikTok).
+- Hợp tác với các trường đại học và câu lạc bộ sinh viên.
+
+Đối tượng: Sinh viên muốn tiết kiệm chi phí khi mua đồ dùng học tập hoặc thanh lý đồ không còn dùng đến.
+
+Lý do chọn:
+- Sinh viên thường có ngân sách hạn chế và nhu cầu cao về việc mua bán đồ cũ giá rẻ.
+- Giúp tối ưu hóa tài nguyên, giảm lãng phí và thúc đẩy tiêu dùng bền vững.
+
+////
+Tên idea: Nền tảng tìm bạn học nhóm hoặc dự án
+
+Quy mô:
++ Triển khai ở đại học FPT Hà Nội trong thời gian đầu với đối tượng chính là sinh viên trường.
++ Mở rộng ra các trường đại học khác vào giai đoạn sau.
+
+Sản phẩm: Các tính năng chính
+- Tìm bạn học: Kết nối sinh viên cùng học môn, khóa học, hoặc chuẩn bị thi.
+- Tạo nhóm dự án: Tìm thành viên cho nhóm làm bài tập hoặc dự án nghiên cứu.
+- Cộng đồng học tập: Chia sẻ tài liệu, tổ chức buổi học trực tuyến với bảng trắng và chat nhóm.
+- Hệ thống gợi ý thông minh: Đề xuất bạn học hoặc nhóm phù hợp dựa trên chuyên ngành, mục tiêu học tập, và thời gian rảnh.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng.
+- Quảng bá qua mạng xã hội, diễn đàn sinh viên, và các sự kiện tại trường đại học.
+- Hợp tác với các trường đại học và tổ chức giáo dục.
+
+Đối tượng:
+- Sinh viên muốn tìm bạn học nhóm, làm dự án hoặc ôn thi.
+- Các nhóm nghiên cứu, câu lạc bộ cần thêm thành viên phù hợp.
+
+Lý do chọn:
+- Học nhóm giúp sinh viên hiểu bài sâu hơn, tăng động lực học tập, và cải thiện kỹ năng làm việc nhóm.
+- Nhu cầu kết nối để học tập hiệu quả là rất cao, đặc biệt ở bậc đại học.
+- Tạo môi trường giúp sinh viên tương tác, xây dựng mối quan hệ và chia sẻ kiến thức.
+
+/////
+Tên idea: Nền tảng chia sẻ tài liệu học tập tiện ích cho sinh viên
+
+Quy mô:
+- Giai đoạn đầu: Tập trung tại trường đại học FPT Hà Nội, nơi sinh viên có nhu cầu cao về việc chia sẻ tài liệu.
+- Giai đoạn mở rộng: Mở rộng ra các trường đại học khác trên toàn quốc.
+
+Sản phẩm: Các tính năng chính
+- Thư viện tài liệu: Tài liệu học tập, bài giảng, đề thi cũ, ghi chú, và sách điện tử.
+- Tải lên và chia sẻ: Sinh viên có thể tải lên tài liệu của mình để chia sẻ hoặc bán.
+- Hệ thống thưởng: Người đăng tài liệu chất lượng được nhận điểm thưởng hoặc hoa hồng từ lượt tải.
+- Tìm kiếm thông minh: Bộ lọc theo môn học, ngành học, trường đại học.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng di động.
+- Quảng bá trên mạng xã hội, diễn đàn sinh viên, và tại các sự kiện sinh viên.
+- Hợp tác với câu lạc bộ học thuật và trung tâm hỗ trợ học tập tại các trường đại học.
+
+Đối tượng: Sinh viên cần tài liệu học tập chất lượng hoặc muốn chia sẻ tài liệu để kiếm thêm thu nhập.
+
+Lý do chọn:
+- Sinh viên thường gặp khó khăn khi tìm kiếm tài liệu học tập phù hợp hoặc đề thi cũ.
+- Nền tảng giúp tiết kiệm thời gian, tối ưu hóa tài nguyên, và tạo ra một cộng đồng học tập hỗ trợ lẫn nhau.
+- Tạo cơ hội để sinh viên kiếm thêm thu nhập từ việc chia sẻ tài liệu cá nhân.
+
+////
+Tên idea: Nền tảng đặt dịch vụ tổ chức sự kiện sinh viên 
+
+Quy mô:
+- Giai đoạn đầu: Tập trung tại trường đại học FPT Hà Nội, nơi sinh viên có nhu cầu cao về tổ chức sự kiện.
+- Giai đoạn mở rộng: Mở rộng ra các trường đại học khác trên toàn quốc.
+
+Sản phẩm: Các tính năng chính
+- Danh sách dịch vụ tổ chức sự kiện:
++ Cho thuê địa điểm, âm thanh, ánh sáng, trang trí, chụp ảnh, quay phim.
++ Đặt MC, ban nhạc, nhóm nhảy hoặc các tiết mục biểu diễn.
+- Tạo sự kiện: Sinh viên hoặc câu lạc bộ có thể lập kế hoạch sự kiện, chọn dịch vụ phù hợp và đặt lịch dễ dàng.
+- Hệ thống gợi ý: Đề xuất dịch vụ phù hợp với ngân sách và yêu cầu của từng sự kiện.
+- Đánh giá và bình luận: Người dùng để lại đánh giá về các dịch vụ đã sử dụng, tăng tính minh bạch.
+- Hỗ trợ thanh toán: Thanh toán trực tiếp qua nền tảng hoặc đặt cọc trước để giữ dịch vụ.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng di động EventHub.
+- Quảng bá: Qua mạng xã hội, diễn đàn sinh viên, và các sự kiện tại trường đại học.
+- Hợp tác: Với các nhà cung cấp dịch vụ tổ chức sự kiện và các câu lạc bộ sinh viên.
+
+Đối tượng:
+- Sinh viên, câu lạc bộ, tổ chức sinh viên cần hỗ trợ tổ chức sự kiện như hội thảo, văn nghệ, ngày hội tuyển dụng.
+- Các nhà cung cấp dịch vụ tổ chức sự kiện nhỏ lẻ muốn tiếp cận đối tượng sinh viên.
+
+Lý do chọn:
+- Nhu cầu cao: Sinh viên thường xuyên tổ chức các sự kiện nhưng gặp khó khăn trong việc tìm kiếm và quản lý dịch vụ.
+- Thị trường tiềm năng: Các nhà cung cấp dịch vụ nhỏ lẻ cần một kênh tập trung để tìm kiếm khách hàng.
+- Giải pháp tối ưu: Giúp tiết kiệm thời gian, tối ưu chi phí và tăng tính chuyên nghiệp cho các sự kiện sinh viên.
+
+
+////
+Tên idea: Nền tảng kết nối các fan hâm mộ trong cùng fandom
+
+Quy mô:
+- Giai đoạn đầu: Tập trung vào vào sinh viên các trường đại học ở Hà Nội với lĩnh vực chính là âm nhạc.
+- Giai đoạn mở rộng: Mở rộng quy mô ra toàn quốc với đa dạng lĩnh vực hơn như phim ảnh, game, sách, thể thao, ...
+
+Sản phẩm: Các tính năng chính
+- Cộng đồng fandom:
++ Tạo và tham gia các nhóm fandom theo sở thích chung.
++ Bảng tin để chia sẻ thông tin, cập nhật tin tức về thần tượng và sự kiện.
+- Kết nối bạn bè:
++ Gợi ý kết nối với những người có cùng fandom và sở thích.
++ Chat nhóm hoặc riêng tư để trao đổi và xây dựng tình bạn.
+- Tổ chức sự kiện fandom:
++ Hỗ trợ tạo các buổi offline, họp fan, hoặc sự kiện trực tuyến như livestream, giveaway.
+- Chia sẻ nội dung: Đăng tải fanart, fanfic, video, hoặc hình ảnh liên quan đến fandom.
+- Marketplace fandom: Mua bán hoặc trao đổi sản phẩm fandom như album, photocard, poster, đồ lưu niệm.
+
+Kênh bán:
+- Nền tảng chính: Website và ứng dụng di động.
+- Quảng bá: Qua các mạng xã hội phổ biến (Facebook, Instagram, TikTok, Twitter) và các cộng đồng fandom sẵn có.
+- Hợp tác: Với các công ty giải trí, nhà sản xuất nội dung, hoặc cửa hàng bán đồ liên quan đến fandom.
+
+Đối tượng:
+- Các fan trong mọi lĩnh vực như âm nhạc (K-pop, US-UK), phim ảnh, game, truyện tranh, thể thao.
+- Các nghệ sĩ, nhà sáng tạo nội dung muốn tương tác với fan hâm mộ.
+
+Lý do chọn:
+- Nhu cầu kết nối lớn: Fan hâm mộ luôn muốn tìm cộng đồng chung để chia sẻ đam mê và giao lưu với những người có cùng sở thích.
+- Tạo giá trị cộng đồng: Kết nối các cá nhân thành một cộng đồng mạnh mẽ, tạo ra sự gắn kết và hỗ trợ lẫn nhau.
+- Tiềm năng thương mại: Thị trường fandom rất lớn với các hoạt động như bán sản phẩm, tổ chức sự kiện, và sản xuất nội dung độc quyền.
+
+////
+Tên idea: Nền tảng kết nối người cần giúp việc vặt
+
+Quy mô:
+- Giai đoạn đầu: Tập trung ở các trường đại học ở Hà Nội, với đối tượng chính là sinh viên.
+- Giai đoạn mở rộng: Phủ sóng toàn quốc và mở rộng ra các khu vực khác.
+
+Sản phẩm:
+- Tìm kiếm người giúp việc vặt: Hỗ trợ các công việc như giao hàng, sửa chữa, dọn dẹp, mua sắm, trông trẻ, hoặc việc nhà khẩn cấp.
+- Đăng công việc nhanh chóng: Người dùng tạo công việc với yêu cầu cụ thể (mô tả, thời gian, địa điểm, mức giá).
+- Đánh giá và xếp hạng: Đảm bảo chất lượng dịch vụ thông qua hệ thống đánh giá từ cả hai phía.
+- Hệ thống thanh toán an toàn: Hỗ trợ thanh toán qua ứng dụng, đảm bảo giao dịch minh bạch và bảo vệ quyền lợi đôi bên.
+
+Kênh bán:
+- Chính: Website và ứng dụng TaskBuddy.
+- Quảng bá: Chạy quảng cáo trên Facebook, TikTok, Instagram.
+
+Đối tượng:
+- Người cần giúp việc vặt:
++ Cá nhân hoặc gia đình bận rộn, không có thời gian tự thực hiện các công việc nhỏ.
++ Doanh nghiệp nhỏ cần hỗ trợ tạm thời (như giao hàng, đóng gói).
+- Người tìm việc:
++ Sinh viên, người lao động tự do, hoặc bất kỳ ai muốn kiếm thêm thu nhập từ các công việc linh hoạt.
+
+Lý do chọn:
+- Nhu cầu thực tế cao: Trong cuộc sống bận rộn, nhiều người cần sự giúp đỡ nhanh chóng cho các công việc hàng ngày.
+- Đơn giản, dễ dùng: Chỉ cần vài thao tác trên ứng dụng, người dùng có thể giải quyết công việc ngay lập tức.

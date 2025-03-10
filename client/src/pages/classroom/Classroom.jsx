@@ -1,9 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import { Alert, Badge, Col, Container, Row, Spinner, Tabs } from "react-bootstrap";
+import { Badge, Col, Container, Row, Tab, Tabs } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { fetchClassroomDetail } from "../../services/ClassroomService";
 import { AuthContext } from "../../context/AuthContext";
 import NotFoundClassroom from "../home/NotFoundClassroom";
+import Post from "./Post";
 
 const Classroom = () => {
     const { classroomID } = useParams();
@@ -50,15 +51,9 @@ const Classroom = () => {
             </Row>
 
             <Tabs defaultActiveKey={"posts"}>
-                {/* <Tab eventKey={"posts"} title="Posts">
-                    <PostTab posts={classroom.posts} classroom={classroom} />
-                </Tab> */}
-                {/* <Tab eventKey={"students"} title="Students">
-                    <StudentTab students={classroom.students} />
+                <Tab eventKey={"posts"} title="Posts">
+                    <Post posts={classroom.posts} classroom={classroom} />
                 </Tab>
-                <Tab eventKey={"homeworks"} title="Homeworks">
-                    <HomeworkTab homeworks={classroom.homeworks} />
-                </Tab> */}
             </Tabs>
         </Container>
     );
