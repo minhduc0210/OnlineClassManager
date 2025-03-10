@@ -5,19 +5,21 @@ const { nanoid } = require("nanoid");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const parts = req.originalUrl.split("/");
-    const requestPath = parts.length > 2 ? parts[2] : "default";
     const publicDir = path.join(__dirname, "../../../public");
-    const fileDir = path.join(publicDir, "uploads", requestPath);
-    fs.mkdirSync(fileDir, { recursive: true }); 
+    const classroomID = req.params?.classroomID || "unknown-classroom";
+    const slotID = req.params?.slotID || "unknown-slot";
+    const fileDir = path.join(publicDir, "uploads", classroomID, slotID);
+    fs.mkdirSync(fileDir, { recursive: true });
+
     cb(null, fileDir);
   },
   filename: function (req, file, cb) {
     const extension = path.extname(file.originalname); 
-    const sign = nanoid(3);
+    const sign = nanoid(3); 
     const userID = req.user?.id || "unknown";
-    const classroomID = req.params?.classroomID || "no-classroom";
-    const fileName = `${classroomID}-${userID}-${sign}${extension}`;
+    const classroomID = req.params?.classroomID || "unknown-classroom";
+    const slotID = req.params?.slotID || "unknown-slot";
+    const fileName = `${classroomID}-${slotID}-${userID}-${sign}${extension}`;
     cb(null, fileName);
   },
 });

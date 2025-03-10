@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Post = require("../../models/Post");
 const Classroom = require("../../models/Classroom");
 const Homework = require("../../models/Homework");
+const Slot = require("../../models/Slot");
 
 const checkDocumentById = (Model, paramName, resourceName) => 
   asyncHandler(async (req, res, next) => {
@@ -20,8 +21,9 @@ const checkDocumentById = (Model, paramName, resourceName) =>
     }
   });
 
+const slotCheck = checkDocumentById(Slot, "slotID", "Slot");
 const postCheck = checkDocumentById(Post, "postID", "Post");
 const classroomCheck = checkDocumentById(Classroom, "classroomID", "Classroom");
 const homeworkCheck = checkDocumentById(Homework, "homeworkID", "Homework");
 
-module.exports = { postCheck, classroomCheck, homeworkCheck };
+module.exports = { postCheck, classroomCheck, homeworkCheck, slotCheck };

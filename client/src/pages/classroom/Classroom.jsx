@@ -5,6 +5,7 @@ import { fetchClassroomDetail } from "../../services/ClassroomService";
 import { AuthContext } from "../../context/AuthContext";
 import NotFoundClassroom from "../home/NotFoundClassroom";
 import Post from "./Post";
+import SlotList from "./SlotList";
 
 const Classroom = () => {
     const { classroomID } = useParams();
@@ -50,9 +51,9 @@ const Classroom = () => {
                 <hr className="bg-primary" />
             </Row>
 
-            <Tabs defaultActiveKey={"posts"}>
-                <Tab eventKey={"posts"} title="Posts">
-                    <Post posts={classroom.posts} classroom={classroom} />
+            <Tabs defaultActiveKey={"slots"}>
+                <Tab eventKey={"slots"} title="Slots">
+                    <SlotList slots={classroom.slots} classroom = {classroom}/>
                 </Tab>
             </Tabs>
         </Container>
