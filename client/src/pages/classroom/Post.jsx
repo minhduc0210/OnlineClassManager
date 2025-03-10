@@ -116,7 +116,9 @@ const Post = ({ classroom }) => {
                                 <Col className="text-end">
                                     {post.author.name} {post.author.lastname}
                                     <span className="ms-2">|</span>
-                                    <span className="ms-2">{moment(post.createdAt).format("DD.MM.YYYY")}</span>
+                                    <span className="ms-2">
+                                        {moment(post.createdAt).format("DD.MM.YYYY HH:mm")}
+                                    </span>
                                 </Col>
                             </Row>
                         </Card.Footer>
