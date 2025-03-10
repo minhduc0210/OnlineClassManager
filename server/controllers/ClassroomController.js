@@ -49,9 +49,10 @@ const joinClassroom = asyncHandler(async (req, res, next) => {
 });
 
 
-const getClassroomInfo = asyncHandler(async (req, res, next) => {
+const getClassroomInfo = asyncHandler(async (req, res) => {
     try {
         const { classroomID } = req.params;
+
         const classroom = await Classroom.findById(classroomID)
             .populate({
                 path: "teacher",
@@ -61,29 +62,30 @@ const getClassroomInfo = asyncHandler(async (req, res, next) => {
                 path: "students",
                 select: "name lastname",
             })
+            .populate("homeworks")
             .populate({
-                path: "posts",
+                path: "slots",
                 populate: {
-                    path: "author",
-                    select: "name lastname",
+                    path: "posts",
+                    populate: {
+                        path: "author",
+                        select: "name lastname",
+                    },
                 },
-            })
-            .populate({
-                path: "homeworks",
             });
 
         if (!classroom) {
-            return res.status(400).json({ message: "Classroom not found" });
+            return res.status(404).json({ message: "Classroom not found" });
         }
-
-        return res.status(200).json({
-            data: classroom,
-        });
+        console.log(classroom)
+        return res.status(200).json({ data: classroom });
+        
     } catch (error) {
         console.error("Error fetching classroom info:", error);
         return res.status(500).json({ message: "Something went wrong while fetching classroom info" });
     }
 });
+
 
 
 const removeStudent = asyncHandler(async (req, res, next) => {

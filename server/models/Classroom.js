@@ -23,10 +23,10 @@ const ClassroomSchema = new Schema({
     default: Date.now,
   },
   accessCode: String,
-  posts: [
+  slots: [
     {
       type: mongoose.Types.ObjectId,
-      ref: "Post",
+      ref: "Slot",
     },
   ],
   homeworks: [

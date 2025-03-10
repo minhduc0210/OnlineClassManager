@@ -1,36 +1,51 @@
 import { useFormik } from "formik";
 import { useEffect, useContext, useState } from "react";
 import { Accordion, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
-import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsByClassroom } from "../../services/PostService.js";
+import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsByClassroom, fetchPostsBySlot } from "../../services/PostService.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { GrDocumentDownload } from "react-icons/gr";
 import moment from "moment";
 import { saveAs } from "file-saver";
 import { AiFillDelete } from "react-icons/ai";
 import { postValidation } from "../../validations";
+import { useLocation, useParams } from "react-router-dom";
+import { fetchClassroomDetail } from "../../services/ClassroomService.js";
 
-const Post = ({ classroom }) => {
-    const { posts, setPosts, user } = useContext(AuthContext);
+const Post = () => {
+    const location = useLocation()
+    const { classroomID, slotID } = useParams();
+    const { slotIndex, title, content } = location.state || {}
+    const { posts, setPosts, user, classroom, setClassroom } = useContext(AuthContext);
     const [showPopover, setShowPopover] = useState(false);
-    const [selectedPost, setSelectedPost] = useState(null); // Chọn post cần xóa
+    const [selectedPost, setSelectedPost] = useState(null);
 
     useEffect(() => {
-        const getPostsByClassroom = async () => {
-            let { data } = await fetchPostsByClassroom(classroom._id);
+        const getPostsBySlot = async () => {
+            let { data } = await fetchPostsBySlot(classroomID, slotID);
+            console.log(data)
             const currentPost = data.posts.posts;
-            setPosts([...currentPost]); // Cập nhật lại danh sách bài viết
+            setPosts([...currentPost]);
         };
-        getPostsByClassroom();
-    }, [setPosts, classroom]);
+        getPostsBySlot();
+        const getClassroomDetail = async (id) => {
+            try {
+                const { data } = await fetchClassroomDetail(id);
+                setClassroom(data.data);
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        getClassroomDetail(classroomID)
+    }, [setPosts]);
 
     const downloadFile = async (filename) => {
         saveAs(fetchDownloadPostFile(filename), `${filename}`);
     };
 
-    const deletePost = async (classroomID, postID) => {
-        await fetchDeletePost(classroomID, postID);
+    const deletePost = async (slotID, postID) => {
+        await fetchDeletePost(slotID, postID);
         setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
-        setShowPopover(false); // Đóng popover sau khi xóa
+        setShowPopover(false);
     };
 
     const popover = (
@@ -49,7 +64,7 @@ const Post = ({ classroom }) => {
                     <Button
                         variant="danger"
                         size="sm"
-                        onClick={() => deletePost(classroom._id, selectedPost._id)}
+                        onClick={() => deletePost(slotID, selectedPost._id)}
                     >
                         Delete
                     </Button>
@@ -59,15 +74,26 @@ const Post = ({ classroom }) => {
     );
 
     return (
-        <>
-            <CreatePostInputs classroom={classroom} />
+        <Container>
+            <Card className="shadow-sm p-3" style={{ backgroundColor: "#F7F7F7" }}>
+                <Card.Body>
+                    <Card.Title className="fs-3 fw-bold">Slot {slotIndex}</Card.Title>
+                    <Card.Subtitle className="mb-3 text-muted">{title}</Card.Subtitle>
+                    <hr />
+                    <Card.Text>{content}</Card.Text>
+                </Card.Body>
+            </Card>
+
+            <CreatePostInputs classroom={classroom} classroomID={classroomID} slotID={slotID}/>
+
             {posts.length === 0 && (
                 <Container fluid style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                     <Image src="/images/no_post.jpg" />
                 </Container>
             )}
+
             {posts
-                .reverse()
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                 .map((post) => (
                     <Card className="mt-2" key={post._id}>
                         <Card.Body>
@@ -86,8 +112,8 @@ const Post = ({ classroom }) => {
                                                     if (showPopover && selectedPost?._id === post._id) {
                                                         setShowPopover(false);
                                                     } else {
-                                                        setSelectedPost(post); // Chọn post cần xóa
-                                                        setShowPopover(true); // Hiển thị popover
+                                                        setSelectedPost(post);
+                                                        setShowPopover(true);
                                                     }
                                                 }}
                                                 overlay={popover}
@@ -124,13 +150,13 @@ const Post = ({ classroom }) => {
                         </Card.Footer>
                     </Card>
                 ))}
-        </>
+        </Container>
     );
 };
 
 export default Post;
 
-const CreatePostInputs = ({ classroom }) => {
+const CreatePostInputs = ({ classroom, classroomID, slotID }) => {
     const formData = new FormData();
     const { setPosts } = useContext(AuthContext);
 
@@ -146,8 +172,8 @@ const CreatePostInputs = ({ classroom }) => {
             formData.append("content", values.content);
             formData.append("post_file", values.post_file);
 
-            await fetchCreatePost(classroom._id, formData);
-            const { data } = await fetchPostsByClassroom(classroom._id);
+            await fetchCreatePost(classroomID, slotID, formData);
+            let { data } = await fetchPostsBySlot(classroomID, slotID)
             const currentPost = data.posts.posts;
             setPosts([...currentPost]);
         },
@@ -158,7 +184,7 @@ const CreatePostInputs = ({ classroom }) => {
     };
 
     return (
-        <Accordion defaultActiveKey={0} className="mt-3">
+        <Accordion defaultActiveKey={0} className="mt-3" >
             <Accordion.Item eventKey="0">
                 <Accordion.Header>Create Post</Accordion.Header>
                 <Accordion.Body>

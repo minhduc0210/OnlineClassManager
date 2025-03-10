@@ -2,7 +2,12 @@ const router = require("express").Router();
 const { isAuth } = require("../middlewares/auth/auth");
 const postController = require("../controllers/PostController");
 const uploadFile = require("../middlewares/assets/UploadFile");
-const { classroomCheck, postCheck } = require("../middlewares/checkExist/CheckExist");
+const { classroomCheck, postCheck, slotCheck } = require("../middlewares/checkExist/CheckExist");
+
+router.get("/download/:filename",
+    // isAuth,
+    postController.sendPostFile
+);
 
 router.get(
     "/:classroomID",
@@ -11,18 +16,27 @@ router.get(
     postController.getPostsByClassroom
 );
 
-router.post(
-    "/:classroomID",
+router.get(
+    "/:classroomID/:slotID",
     isAuth,
-    uploadFile.single("post_file"),
     classroomCheck,
+    slotCheck,
+    postController.getPostsBySlot
+);
+
+router.post(
+    "/:classroomID/:slotID",
+    isAuth,
+    classroomCheck,
+    slotCheck,
+    uploadFile.single("post_file"),
     postController.createPost
 );
 
 router.delete(
-    "/:classroomID/:postID",
+    "/:slotID/:postID",
     isAuth,
-    classroomCheck,
+    slotCheck,
     postCheck,
     postController.deletePost
 );
@@ -35,8 +49,6 @@ router.patch(
     postController.updatePost
 );
 
-router.get("/download/:filename",
-    postController.sendPostFile
-);
+
 
 module.exports = router;
