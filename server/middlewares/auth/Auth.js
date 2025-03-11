@@ -33,12 +33,16 @@ const isAuth = (req, res, next) => {
 
 const isTeacher = (req, res, next) => {
   if (req.user.role === "teacher") return next();
-  return next(new CustomError("You are not authorized"));
+  return res.status(401).json({
+      message: "You're not authorized!",
+    });
 };
 
 const isStudent = (req, res, next) => {
   if (req.user.role === "student") return next();
-  return next(new CustomError("You are not authorized"));
+  return res.status(401).json({
+      message: "You're not authorized!",
+    });
 };
 
 module.exports = {

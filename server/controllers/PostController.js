@@ -57,21 +57,14 @@ const updatePost = asyncHandler(async (req, res, next) => {
   try {
     const { title, content } = req.body;
     const post = req.post;
-    title ? (post.title = title) : null;
-    content ? (post.content = content) : null;
-    req.file ? (post.file = req.file.filename) : null;
-    if (!post) {
-      return next(new CustomError("Post not found", 400));
-    }
-    if (req.user.id !== post.author.toString()) {
-      return next(new CustomError("You are not authorized", 400));
-    }
-    post.save();
+    if (title) post.title = title;
+    if (content) post.content = content;
+    if (req.file) post.file = req.file.filename
+    await post.save();
     return res.status(200).json({ success: true, data: post });
   } catch (error) {
     return res.status(500).json({ message: error })
   }
-
 });
 
 const getPostsByClassroom = asyncHandler(async (req, res, next) => {
@@ -104,7 +97,7 @@ const getPostsBySlot = asyncHandler(async (req, res, next) => {
       .populate({
         path: "posts",
         select: "-__v",
-        populate: { path: "author", select: "name lastname" },
+        populate: { path: "author", select: "name lastname role" },
       });
     return res.status(200).json({ posts });
   } catch (error) {

@@ -1,41 +1,43 @@
 import { useFormik } from "formik";
 import { useEffect, useContext, useState } from "react";
-import { Accordion, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
-import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsByClassroom, fetchPostsBySlot } from "../../services/PostService.js";
+import ReactMarkdown from "react-markdown"
+import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
+import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsBySlot, fetchUpdatePost } from "../../services/PostService.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { GrDocumentDownload } from "react-icons/gr";
 import moment from "moment";
 import { saveAs } from "file-saver";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { postValidation } from "../../validations";
 import { useLocation, useParams } from "react-router-dom";
 import { fetchClassroomDetail } from "../../services/ClassroomService.js";
 
 const Post = () => {
-    const location = useLocation()
+    const location = useLocation();
     const { classroomID, slotID } = useParams();
-    const { slotIndex, title, content } = location.state || {}
+    const { slotIndex, title, content } = location.state || {};
     const { posts, setPosts, user, classroom, setClassroom } = useContext(AuthContext);
     const [showPopover, setShowPopover] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [editingPost, setEditingPost] = useState({});
 
     useEffect(() => {
         const getPostsBySlot = async () => {
             let { data } = await fetchPostsBySlot(classroomID, slotID);
-            console.log(data)
-            const currentPost = data.posts.posts;
-            setPosts([...currentPost]);
+            setPosts([...data.posts.posts]);
         };
         getPostsBySlot();
+
         const getClassroomDetail = async (id) => {
             try {
                 const { data } = await fetchClassroomDetail(id);
                 setClassroom(data.data);
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         };
-        getClassroomDetail(classroomID)
+        getClassroomDetail(classroomID);
     }, [setPosts]);
 
     const downloadFile = async (filename) => {
@@ -46,6 +48,16 @@ const Post = () => {
         await fetchDeletePost(slotID, postID);
         setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postID));
         setShowPopover(false);
+    };
+
+    const handleShowModal = (post = null) => {
+        setEditingPost(post);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setEditingPost(null);
+        setShowModal(false);
     };
 
     const popover = (
@@ -84,18 +96,25 @@ const Post = () => {
                 </Card.Body>
             </Card>
 
-            <CreatePostInputs classroom={classroom} classroomID={classroomID} slotID={slotID}/>
+            <Button variant="primary" className="mt-3" onClick={() => handleShowModal()}>
+                Create Post
+            </Button>
 
             {posts.length === 0 && (
-                <Container fluid style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <Container fluid className="d-flex justify-content-center align-items-center mt-3">
                     <Image src="/images/no_post.jpg" />
                 </Container>
             )}
 
-            {posts
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                .map((post) => (
-                    <Card className="mt-2" key={post._id}>
+            {(() => {
+                const teacherPosts = posts.filter((post) => post.author.role === "teacher");
+                const studentPosts = posts
+                    .filter((post) => post.author.role === "student")
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                const sortedPosts = [...teacherPosts, ...studentPosts];
+
+                return sortedPosts.map((post) => (
+                    <Card className="mt-2" key={post._id} style={post.author.role === "teacher" ? { backgroundColor: "#FFF3CD" } : {}}>
                         <Card.Body>
                             <Card.Title>
                                 <Row>
@@ -104,6 +123,9 @@ const Post = () => {
                                     </Col>
                                     {user._id === post.author._id && (
                                         <Col className="text-end">
+                                            <Button size="sm" variant="info" className="me-2" onClick={() => handleShowModal(post)}>
+                                                <AiFillEdit />
+                                            </Button>
                                             <OverlayTrigger
                                                 trigger="click"
                                                 placement="bottom"
@@ -127,7 +149,9 @@ const Post = () => {
                                     )}
                                 </Row>
                             </Card.Title>
-                            <Card.Text>{post.content}</Card.Text>
+                            <Card.Text>
+                                <ReactMarkdown>{post.content}</ReactMarkdown>
+                            </Card.Text>
                         </Card.Body>
                         <Card.Footer className="text-muted">
                             <Row>
@@ -139,43 +163,42 @@ const Post = () => {
                                         </Button>
                                     )}
                                 </Col>
-                                <Col className="text-end">
-                                    {post.author.name} {post.author.lastname}
-                                    <span className="ms-2">|</span>
-                                    <span className="ms-2">
-                                        {moment(post.createdAt).format("DD.MM.YYYY HH:mm")}
-                                    </span>
-                                </Col>
+                                <Col className="text-end">{post.author.name} {post.author.lastname} | {moment(post.createdAt).format("DD.MM.YYYY HH:mm")}</Col>
                             </Row>
                         </Card.Footer>
                     </Card>
-                ))}
+                ));
+            })()}
+
+            <PostModal show={showModal} handleClose={handleCloseModal} classroomID={classroomID} slotID={slotID} post={editingPost} setPosts={setPosts} />
         </Container>
     );
 };
 
 export default Post;
 
-const CreatePostInputs = ({ classroom, classroomID, slotID }) => {
-    const formData = new FormData();
-    const { setPosts } = useContext(AuthContext);
-
+const PostModal = ({ show, handleClose, classroomID, slotID, post, setPosts }) => {
+    const formData = new FormData()
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            title: "",
-            content: "",
-            post_file: null,
+            title: post?.title || "",
+            content: post?.content || "",
+            post_file: post?.file || null,
         },
         validationSchema: postValidation,
-        onSubmit: async (values, bag) => {
+        onSubmit: async (values) => {
             formData.append("title", values.title);
             formData.append("content", values.content);
-            formData.append("post_file", values.post_file);
-
-            await fetchCreatePost(classroomID, slotID, formData);
-            let { data } = await fetchPostsBySlot(classroomID, slotID)
-            const currentPost = data.posts.posts;
-            setPosts([...currentPost]);
+            formData.append("post_file", values.post_file)
+            if (post) {
+                await fetchUpdatePost(classroomID, slotID, post._id, formData);
+            } else {
+                await fetchCreatePost(classroomID, slotID, formData);
+            }
+            let { data } = await fetchPostsBySlot(classroomID, slotID);
+            setPosts([...data.posts.posts]);
+            handleClose();
         },
     });
 
@@ -184,45 +207,27 @@ const CreatePostInputs = ({ classroom, classroomID, slotID }) => {
     };
 
     return (
-        <Accordion defaultActiveKey={0} className="mt-3" >
-            <Accordion.Item eventKey="0">
-                <Accordion.Header>Create Post</Accordion.Header>
-                <Accordion.Body>
-                    <Form className="px-5" onSubmit={formik.handleSubmit} encType="multipart/form-data">
-                        <Form.Group className="mt-2">
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control
-                                onChange={formik.handleChange}
-                                type="text"
-                                name="title"
-                                isInvalid={formik.touched.title && formik.errors.title}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {formik.errors.title}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mt-2">
-                            <Form.Label>Content</Form.Label>
-                            <Form.Control
-                                onChange={formik.handleChange}
-                                as="textarea"
-                                rows={2}
-                                type="text"
-                                name="content"
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="post_file" className="mb-3 mt-2">
-                            <Form.Label>File Upload</Form.Label>
-                            <Form.Control onChange={handleChangeFile} type="file" name="post_file" aria-label="Upload" />
-                        </Form.Group>
-                        <div className="d-grid gap-2">
-                            <Button size="sm" type="submit">
-                                Send
-                            </Button>
-                        </div>
-                    </Form>
-                </Accordion.Body>
-            </Accordion.Item>
-        </Accordion>
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+                <Modal.Title>{post ? "Edit Post" : "Create Post"}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form onSubmit={formik.handleSubmit} className="px-5" encType="multipart/form-data">
+                    <Form.Group className="mt-2">
+                        <Form.Label>Title</Form.Label>
+                        <Form.Control type="text" name="title" onChange={formik.handleChange} value={formik.values.title} />
+                    </Form.Group>
+                    <Form.Group className="mt-2">
+                        <Form.Label>Content</Form.Label>
+                        <Form.Control as="textarea" rows={3} name="content" onChange={formik.handleChange} value={formik.values.content} />
+                    </Form.Group>
+                    <Form.Group controlId="post_file" className="mb-3 mt-2">
+                        <Form.Label>File Upload</Form.Label>
+                        <Form.Control onChange={handleChangeFile} type="file" name="post_file" aria-label="Upload" />
+                    </Form.Group>
+                    <Button className="mt-3" type="submit">{post ? "Update" : "Create"}</Button>
+                </Form>
+            </Modal.Body>
+        </Modal>
     );
 };

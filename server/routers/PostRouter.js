@@ -42,10 +42,12 @@ router.delete(
 );
 
 router.patch(
-    "/:postID",
+    "/:classroomID/:slotID/:postID",
     isAuth,
-    uploadFile.single("post_file"),
+    classroomCheck,
+    slotCheck,
     postCheck,
+    uploadFile.single("post_file"),
     postController.updatePost
 );
 

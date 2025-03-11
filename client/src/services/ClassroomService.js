@@ -19,10 +19,15 @@ export const fetchClassroomDetail = async (classroomID) => {
   return result;
 };
 
-export const fetchUpdateClassroomInformation = async (classroomID, inputs) => {
+export const fetchUpdateClassroom = async (classroomID, inputs) => {
   const result = await api.patch(
     `${BASE_URL}/classrooms/${classroomID}`,
     inputs
   );
+  return result;
+};
+
+export const fetchDeleteClassroom = async (classroomID) => {
+  const result = await api.delete(`${BASE_URL}/classrooms/${classroomID}`);
   return result;
 };

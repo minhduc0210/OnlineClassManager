@@ -2,6 +2,7 @@ const router = require("express").Router();
 const classroomController = require("../controllers/ClassroomController");
 const inputValidator = require("../middlewares/inputValidator/InputValidator");
 const { isAuth, isTeacher, isStudent } = require("../middlewares/auth/auth");
+const { classroomCheck } = require("../middlewares/checkExist/CheckExist");
 
 router.post(
   "/create",
@@ -31,6 +32,7 @@ router.patch(
   "/:classroomID",
   isAuth,
   isTeacher,
+  classroomCheck,
   classroomController.changeInformation
 );
 
@@ -38,6 +40,7 @@ router.delete(
   "/:classroomID",
   isAuth,
   isTeacher,
+  classroomCheck,
   classroomController.deleteClassroom
 );
 

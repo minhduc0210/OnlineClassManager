@@ -4,6 +4,7 @@ const Classroom = require("../models/Classroom");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const Homework = require("../models/Homework");
+const Slot = require("../models/Slot");
 
 const createClassroom = asyncHandler(async (req, res, next) => {
     try {
@@ -79,7 +80,7 @@ const getClassroomInfo = asyncHandler(async (req, res) => {
         }
         console.log(classroom)
         return res.status(200).json({ data: classroom });
-        
+
     } catch (error) {
         console.error("Error fetching classroom info:", error);
         return res.status(500).json({ message: "Something went wrong while fetching classroom info" });
@@ -102,38 +103,49 @@ const removeStudent = asyncHandler(async (req, res, next) => {
 });
 
 const changeInformation = asyncHandler(async (req, res, next) => {
-    const { classroomID } = req.params;
-    const { title, subtitle } = req.body;
-    const classroom = await Classroom.findByIdAndUpdate(
-        classroomID,
-        {
-            title,
-            subtitle,
-        },
-        { new: true }
-    );
-    if (!classroom) return next(new CustomError("Classroom not found", 400));
-    if (classroom.teacher.toString() !== req.user.id) {
-        return next(new CustomError("You are not authorized", 400));
+    try {
+        const { title, subtitle } = req.body;
+        const { classroom } = req;
+
+        if (classroom.teacher.toString() !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized!" })
+        }
+        if (title) classroom.title = title;
+        if (subtitle) classroom.subtitle = subtitle;
+        await classroom.save();
+        return res.status(200).json({ classroom });
+    } catch (error) {
+        console.error("Error updating classroom info:", error);
+        return res.status(500).json({ message: "Something went wrong while updating classroom info" });
     }
-    return res.status(200).json({ classroom });
+
 });
 
 const deleteClassroom = asyncHandler(async (req, res, next) => {
-    const { classroomID } = req.params;
-    const classroom = await Classroom.findById(classroomID);
-    if (!classroom) return next(new CustomError("Classroom not found", 400));
-    if (classroom.teacher.toString() !== req.user.id.toString()) {
-        return next(new CustomError("You are not authorized", 400));
-    }
+    try {
+        const { classroom } = req;
+        if (classroom.teacher.toString() !== req.user.id) {
+            return res.status(403).json({ message: "You are not authorized!" });
+        }
+        const slots = await Slot.find({ _id: { $in: classroom.slots } });
+        for (const slot of slots) {
+            await Post.deleteMany({ _id: { $in: slot.posts } });
+        }
+        await Slot.deleteMany({ _id: { $in: classroom.slots } });
+        await Classroom.findByIdAndDelete(classroom._id);
 
-    for (let i = 0; i < classroom.posts.length; i++) {
-        await Post.findByIdAndDelete(classroom.posts[i]);
+        return res.status(200).json({
+            success: true,
+            status: 200,
+            message: "Classroom deleted successfully!"
+        });
+    } catch (error) {
+        console.error("Error deleting classroom:", error);
+        return res.status(500).json({ message: "Something went wrong while deleting classroom" });
     }
-
-    classroom.remove();
-    return res.status(200).json({ success: true });
 });
+
+
 
 module.exports = {
     createClassroom,

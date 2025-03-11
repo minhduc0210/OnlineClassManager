@@ -26,3 +26,8 @@ export const fetchDeletePost = async (slotID, postID) => {
   const result = await api.delete(`${BASE_URL}/posts/${slotID}/${postID}`);
   return result
 };
+
+export const fetchUpdatePost = async (classroomID, slotID, postID, inputs) => {
+  const result = await api.patch(`${BASE_URL}/posts/${classroomID}/${slotID}/${postID}`, inputs);
+  return result;
+};
