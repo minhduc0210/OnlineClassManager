@@ -13,6 +13,7 @@ import Footer from "./component/Footer/Footer";
 import { useContext } from "react";
 import Classroom from "./pages/classroom/Classroom";
 import Post from "./pages/classroom/Post";
+import UserProfile from "./pages/profile/UserProfile";
 
 function App() {
   const { isLoggin } = useContext(AuthContext);
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/classroom/:classroomID" element={<Classroom />} />
           <Route path="/classroom/:classroomID/:slotID" element={<Post />} />
+          <Route path="/profile" element={<UserProfile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

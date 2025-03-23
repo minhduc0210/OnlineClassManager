@@ -3,7 +3,7 @@ import { Button, OverlayTrigger, Popover, Stack } from "react-bootstrap";
 import { BsPersonCircle } from "react-icons/bs";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { IoAddCircleSharp, IoSchoolSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { fetchUser } from "../../services/AuthService";
 import StudentModal from "../Modals/StudentModal";
@@ -79,6 +79,8 @@ const ProfileButton = () => {
         variant="outline-secondary"
         className="ms-auto btn-outline-primary"
         size="sm"
+        as={Link}
+        to={"/profile"}
       >
         <BsPersonCircle className="me-2" />
         {user.name} {user.lastname}

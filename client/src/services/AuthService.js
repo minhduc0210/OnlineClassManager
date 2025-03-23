@@ -56,3 +56,11 @@ export const fetchLogout = async (userID) => {
     return result;
   }
 };
+
+export const fetchUpdateUser = async (userID, inputs) => {
+  if (userID !== undefined) {
+    const result = await api.put(`${BASE_URL}/users/${userID}`, inputs);
+    console.log(result)
+    return result;
+  }
+};

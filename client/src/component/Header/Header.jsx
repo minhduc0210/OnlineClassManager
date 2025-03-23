@@ -6,7 +6,6 @@ import ProfileButton from "./ProfileButton";
 
 const Header = () => {
     const { isLoggin } = useContext(AuthContext);
-
     return (
         <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
             <Container>

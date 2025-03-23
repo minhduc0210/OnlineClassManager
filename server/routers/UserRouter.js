@@ -9,7 +9,7 @@ router.post("/register", inputValidator.newUser(), userController.register);
 router.post("/login", userController.login);
 router.get("/logout/:userID", userController.logout);
 router.post("/refreshtoken", userController.refreshToken);
-router.patch("/:userID", isAuth, userController.changeInformation);
+router.put("/:userID", isAuth, userController.changeInformation);
 router.get("/loggedUser", isAuth, userController.getUserInformation);
 
 module.exports = router;
