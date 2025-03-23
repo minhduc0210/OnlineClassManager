@@ -11,5 +11,6 @@ router.get("/logout/:userID", userController.logout);
 router.post("/refreshtoken", userController.refreshToken);
 router.put("/:userID", isAuth, userController.changeInformation);
 router.get("/loggedUser", isAuth, userController.getUserInformation);
+router.put("/profile/change-password", isAuth, userController.changePassword);
 
 module.exports = router;

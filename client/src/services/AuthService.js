@@ -60,7 +60,12 @@ export const fetchLogout = async (userID) => {
 export const fetchUpdateUser = async (userID, inputs) => {
   if (userID !== undefined) {
     const result = await api.put(`${BASE_URL}/users/${userID}`, inputs);
-    console.log(result)
     return result;
   }
+};
+
+export const fetchChangePassword = async (inputs) => {
+    const result = await api.put(`${BASE_URL}/users/profile/change-password`, inputs);
+    console.log(result)
+    return result;
 };

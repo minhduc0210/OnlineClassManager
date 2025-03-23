@@ -150,6 +150,29 @@ const getUserInformation = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ user, classrooms });
 });
 
+const changePassword = asyncHandler(async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isMatch = await compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        errors: [{ path: "oldPassword", msg: "Old password is incorrect" }],
+      });
+    }
+    const hashedPassword = await hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = {
   register,
   login,
@@ -157,4 +180,5 @@ module.exports = {
   refreshToken,
   changeInformation,
   getUserInformation,
+  changePassword
 };
