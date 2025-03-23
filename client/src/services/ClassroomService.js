@@ -31,3 +31,8 @@ export const fetchDeleteClassroom = async (classroomID) => {
   const result = await api.delete(`${BASE_URL}/classrooms/${classroomID}`);
   return result;
 };
+
+export const fetchRemoveStudentFromClass = async (classroomID, studentID) => {
+  const result = await api.patch(`${BASE_URL}/classrooms/${classroomID}/${studentID}`);
+  return result;
+};

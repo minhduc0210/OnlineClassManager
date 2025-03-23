@@ -61,7 +61,7 @@ const getClassroomInfo = asyncHandler(async (req, res) => {
             })
             .populate({
                 path: "students",
-                select: "name lastname",
+                select: "name lastname email",
             })
             .populate("homeworks")
             .populate({
@@ -89,20 +89,24 @@ const getClassroomInfo = asyncHandler(async (req, res) => {
 
 
 
-const removeStudent = asyncHandler(async (req, res, next) => {
-    const { classroomID, studentID } = req.params;
-    const classroom = await Classroom.findById(classroomID);
-    if (!classroom) return next(new CustomError("Classroom not found", 400));
-    if (classroom.teacher.toString() !== req.user.id) {
-        return next(new CustomError("You are not authorized", 400));
+const removeStudent = asyncHandler(async (req, res) => {
+    try {
+        const { classroomID, studentID } = req.params;
+        const classroom = await Classroom.findById(classroomID);
+        const studentIndex = classroom.students.indexOf(studentID);
+        if (studentIndex === -1) {
+            return res.status(404).json({ success: false, message: "Student not found in classroom" });
+        }
+        classroom.students.splice(classroom.students.indexOf(studentID), 1);
+        await classroom.save();
+        return res.status(200).json({ success: true });
+    } catch (error) {
+        console.error("Error fetching classroom info:", error);
+        return res.status(500).json({ message: "Something went wrong while removing student from class" });
     }
-
-    classroom.students.splice(classroom.students.indexOf(studentID), 1);
-    classroom.save();
-    return res.status(200).json({ success: true });
 });
 
-const changeInformation = asyncHandler(async (req, res, next) => {
+const changeInformation = asyncHandler(async (req, res) => {
     try {
         const { title, subtitle } = req.body;
         const { classroom } = req;
@@ -121,7 +125,7 @@ const changeInformation = asyncHandler(async (req, res, next) => {
 
 });
 
-const deleteClassroom = asyncHandler(async (req, res, next) => {
+const deleteClassroom = asyncHandler(async (req, res) => {
     try {
         const { classroom } = req;
         if (classroom.teacher.toString() !== req.user.id) {

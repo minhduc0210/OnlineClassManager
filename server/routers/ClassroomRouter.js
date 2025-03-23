@@ -25,10 +25,11 @@ router.patch(
   "/:classroomID/:studentID",
   isAuth,
   isTeacher,
+  classroomCheck,
   classroomController.removeStudent
 );
 
-router.patch(
+router.put(
   "/:classroomID",
   isAuth,
   isTeacher,

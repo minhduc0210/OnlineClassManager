@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Badge, Button, Col, Container, Form, Modal, Row, Tab, Tabs } from "react-bootstrap";
+import { Badge, Button, Col, Container, Form, Modal, Row, Spinner, Tab, Tabs } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchClassroomDetail, fetchDeleteClassroom, fetchUpdateClassroom } from "../../services/ClassroomService";
 import { AuthContext } from "../../context/AuthContext";
@@ -26,6 +26,7 @@ const Classroom = () => {
         endTime: "",
     });
 
+
     useEffect(() => {
         const getClassroomDetail = async (id) => {
             try {
@@ -37,6 +38,14 @@ const Classroom = () => {
         };
         getClassroomDetail(classroomID);
     }, [classroomID, setClassroom]);
+
+    if (!user) {
+        return (
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                <Spinner animation="border" variant="primary" />
+            </Container>
+        )
+    }
 
     if (!classroom) {
         return (
@@ -135,13 +144,12 @@ const Classroom = () => {
                     </span>
                 </Col>
             </Row>
-
             <Tabs defaultActiveKey={"slots"}>
                 <Tab eventKey={"slots"} title="Slots">
                     <SlotList slots={classroom.slots} classroom={classroom} setClassroom={setClassroom} />
                 </Tab>
                 <Tab eventKey={"students"} title="Students">
-                    <StudentTab students={classroom.students} />
+                    <StudentTab students={classroom.students} role={user.role} classroomID={classroom._id} setClassroom={setClassroom}/>
                 </Tab>
             </Tabs>
 
