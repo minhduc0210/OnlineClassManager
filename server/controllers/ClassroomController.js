@@ -88,7 +88,6 @@ const getClassroomInfo = asyncHandler(async (req, res) => {
 });
 
 
-
 const removeStudent = asyncHandler(async (req, res) => {
     try {
         const { classroomID, studentID } = req.params;

@@ -109,20 +109,21 @@ const refreshToken = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ accessToken, refreshToken });
 });
 
-const changeInformation = asyncHandler(async (req, res, next) => {
-  const { userID } = req.params;
-  const { name, lastname, email } = req.body;
-  if (req.user.id !== userID) {
-    return next(new CustomError("You are not authorized"));
+const changeInformation = asyncHandler(async (req, res) => {
+  try {
+    const { userID } = req.params;
+    const { name, lastname } = req.body;
+    const user = await User.findByIdAndUpdate(
+      userID,
+      { name, lastname },
+      { new: true }
+    );
+    if (!user) return res.status(404).json({message: "Not found user!"})
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json(error)
   }
-  const user = await User.findByIdAndUpdate(
-    userID,
-    { email, name, lastname },
-    { new: true }
-  );
-  if (!user) return next(new CustomError("User not found", 400));
-
-  return res.status(200).json({ data: user });
 });
 
 const getUserInformation = asyncHandler(async (req, res, next) => {
