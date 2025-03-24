@@ -12,6 +12,8 @@ const {
   deleteRefreshToken,
 } = require("../helpers/tokens/tokenHelper");
 const RefreshToken = require("../models/RefreshToken");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer")
 
 const register = asyncHandler(async (req, res, next) => {
   try {
@@ -173,6 +175,57 @@ const changePassword = asyncHandler(async (req, res) => {
   }
 });
 
+const generateRandomPassword = () => {
+  return Math.random().toString(36).slice(-6); 
+};
+
+const resetPassword = asyncHandler(async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found!",
+      });
+    }
+
+    // Tạo mật khẩu mới ngẫu nhiên
+    const newPassword = Math.random().toString(36).slice(-6);
+    
+    // Mã hóa mật khẩu mới
+    const hashedPassword = await hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    // Cấu hình transport cho email
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Nội dung email
+    const mailOptions = {
+      to: user.email,
+      from: process.env.EMAIL_USER,
+      subject: "Your New Password",
+      text: `Hello,\n\n`
+        + `Your password has been reset. Here is your new password:\n\n`
+        + `New Password: ${newPassword}\n\n`
+        + `Please log in and change your password as soon as possible.\n\n`
+        + `If you did not request this, please contact support immediately.`,
+    };
+
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ message: "A new password has been sent to your email" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = {
   register,
   login,
@@ -180,5 +233,6 @@ module.exports = {
   refreshToken,
   changeInformation,
   getUserInformation,
-  changePassword
+  changePassword,
+  resetPassword
 };

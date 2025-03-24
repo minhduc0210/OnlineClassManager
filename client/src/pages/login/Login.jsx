@@ -5,22 +5,25 @@ import {
     Button,
     Row,
     Col,
+    Modal,
 } from "react-bootstrap"
 import { loginValidation } from "../../validations"
 import { useFormik } from "formik"
 import { useNavigate } from "react-router-dom"
-import { fetchLogin } from "../../services/AuthService"
+import { fetchLogin, fetchResetPassword } from "../../services/AuthService"
 import { toast } from "react-toastify"
 import { AuthContext } from "../../context/AuthContext";
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 
 const Login = () => {
     const { login, user } = useContext(AuthContext)
     const navigate = useNavigate();
+    const [showResetModal, setShowResetModal] = useState(false);
+    const [resetEmail, setResetEmail] = useState("");
 
     useEffect(() => {
         if (user) {
-            navigate("/"); 
+            navigate("/");
         }
     }, [user, navigate]);
 
@@ -57,6 +60,23 @@ const Login = () => {
         }
         ,
     });
+
+    const handleResetPassword = async () => {
+        try {
+            const response = await fetchResetPassword({ email: resetEmail });
+            console.log(response)
+            if (response?.status === 200) {
+                toast.success("A new password has been sent to your email");
+                setShowResetModal(false);
+                setResetEmail("");
+            } else {
+                toast.error("Error sending reset password email");
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response?.data?.message || "Error sending reset password email");
+        }
+    };
 
     return (
         <Container>
@@ -106,10 +126,42 @@ const Login = () => {
                             <Button size="lg" className="mt-3" type="submit" style={{ backgroundColor: "#1565C0", color: "white" }}>
                                 Login
                             </Button>
+                            <div className="text-end mt-2">
+                                <Button variant="link" className="p-0" onClick={() => setShowResetModal(true)}>
+                                    Forgot Password?
+                                </Button>
+                            </div>
                         </div>
                     </Col>
                 </Form>
             </Row>
+
+            {/* Reset Password Modal */}
+            <Modal show={showResetModal} onHide={() => setShowResetModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Reset Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <FloatingLabel label="Enter your email" className="mb-3" controlId="floatingResetEmail">
+                            <Form.Control
+                                type="email"
+                                placeholder="name@example.com"
+                                value={resetEmail}
+                                onChange={(e) => setResetEmail(e.target.value)}
+                            />
+                        </FloatingLabel>
+                        <div className="d-flex justify-content-end">
+                            <Button variant="secondary" onClick={() => setShowResetModal(false)} className="me-2">
+                                Cancel
+                            </Button>
+                            <Button variant="primary" onClick={handleResetPassword}>
+                                Reset Password
+                            </Button>
+                        </div>
+                    </Form>
+                </Modal.Body>
+            </Modal>
         </Container>
     );
 };

@@ -66,6 +66,10 @@ export const fetchUpdateUser = async (userID, inputs) => {
 
 export const fetchChangePassword = async (inputs) => {
     const result = await api.put(`${BASE_URL}/users/profile/change-password`, inputs);
-    console.log(result)
     return result;
+};
+
+export const fetchResetPassword = async (inputs) => {
+  const result = await axios.post(`${BASE_URL}/users/reset-password`, inputs);
+  return result;
 };
