@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useEffect, useContext, useState } from "react";
 import ReactMarkdown from "react-markdown"
-import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
+import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger, Badge } from "react-bootstrap";
 import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsBySlot, fetchUpdatePost } from "../../services/PostService.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { GrDocumentDownload } from "react-icons/gr";
@@ -15,7 +15,7 @@ import { fetchClassroomDetail } from "../../services/ClassroomService.js";
 const Post = () => {
     const location = useLocation();
     const { classroomID, slotID } = useParams();
-    const { slotIndex, title, content } = location.state || {};
+    const { slotIndex, title, content, startTime, endTime } = location.state || {};
     const { posts, setPosts, user, classroom, setClassroom } = useContext(AuthContext);
     const [showPopover, setShowPopover] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
@@ -85,20 +85,57 @@ const Post = () => {
         </Popover>
     );
 
+    //Display slot status
+    const currentTime = moment();
+    let status = "";
+    let statusVariant = "";
+    if (currentTime.isBefore(moment(startTime))) {
+        status = "Not started yet";
+        statusVariant = "secondary";
+    } else if (currentTime.isBetween(moment(startTime), moment(endTime))) {
+        status = "On-going";
+        statusVariant = "primary";
+    } else {
+        status = "Finished";
+        statusVariant = "success";
+    }
+
     return (
         <Container>
             <Card className="shadow-sm p-3" style={{ backgroundColor: "#F7F7F7" }}>
                 <Card.Body>
-                    <Card.Title className="fs-3 fw-bold">Slot {slotIndex}</Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">{title}</Card.Subtitle>
-                    <hr />
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <Card.Title className="fw-bold">
+                                <Badge
+                                    className="fs-6 px-2 py-1"
+                                    style={{
+                                        backgroundColor: "#D1DFF9",
+                                        color: "#D1DFF9",
+                                        borderRadius: "8px",
+                                    }}
+                                >
+                                    Slot {slotIndex}
+                                </Badge>
+                            </Card.Title>
+                            <Card.Subtitle className="mb-3 text-muted">{title}</Card.Subtitle>
+                        </div>
+                        <Badge bg={statusVariant} className="fs-6">{status}</Badge>
+                    </div>
+                    <Card.Text className="text-muted">
+                        📅 {moment(startTime).format("HH:mm DD/MM/YYYY")} - {moment(endTime).format("HH:mm DD/MM/YYYY")}<br />
+                    </Card.Text>
                     <Card.Text>{content}</Card.Text>
                 </Card.Body>
             </Card>
 
-            <Button variant="primary" className="mt-3" onClick={() => handleShowModal()}>
-                Create Post
-            </Button>
+            {
+                currentTime.isBetween(moment(startTime), moment(endTime)) && (
+                    <Button variant="secondary" className="mt-3" onClick={() => handleShowModal()}>
+                        Create Post
+                    </Button>
+                )
+            }
 
             {posts.length === 0 && (
                 <Container fluid className="d-flex justify-content-center align-items-center mt-3">
@@ -141,7 +178,7 @@ const Post = () => {
                                                 overlay={popover}
                                                 rootClose
                                             >
-                                                <Button size="sm" variant="warning">
+                                                <Button size="sm" variant="danger">
                                                     <AiFillDelete />
                                                 </Button>
                                             </OverlayTrigger>

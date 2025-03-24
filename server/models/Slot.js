@@ -15,15 +15,15 @@ const SlotSchema = new Schema(
       },
     ],
     startTime: {
-        type: Date,
-        required: true,
-      },
-      endTime: {
-        type: Date,
-        required: true,
-      },
+      type: Date,
+      required: true,
+    },
+    endTime: {
+      type: Date,
+      required: true,
+    },
   },
-  { timestamps: true } 
+  { timestamps: true }
 );
 
 const Slot = mongoose.model("Slot", SlotSchema);

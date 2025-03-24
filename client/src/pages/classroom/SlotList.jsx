@@ -40,6 +40,7 @@ const SlotList = ({ slots, classroom, setClassroom }) => {
             toast.error(err)
         }
     };
+    
 
     return (
         <div>
@@ -57,7 +58,7 @@ const SlotList = ({ slots, classroom, setClassroom }) => {
                         </h5>
                         <Link
                             to={`/classroom/${classroom._id}/${slot._id}`}
-                            state={{ slotIndex: index + 1, title: slot.title, content: slot.content }}
+                            state={{ slotIndex: index + 1, title: slot.title, content: slot.content, startTime: slot.startTime, endTime: slot.endTime }}
                             className="text-primary fw-bold"
                         >
                             View slot
