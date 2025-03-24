@@ -5,6 +5,7 @@ const Post = require("../models/Post");
 const path = require("path");
 const fs = require("fs");
 const Slot = require("../models/Slot");
+const { Notification } = require("../models/Notification");
 
 const createPost = asyncHandler(async (req, res, next) => {
   try {
@@ -15,19 +16,33 @@ const createPost = asyncHandler(async (req, res, next) => {
     }
     const { title, content } = req.body;
     const slot = req.slot;
+    const { role } = req.user
+
     const newPost = await Post({ title, content });
     newPost.author = req.user.id;
     req.file ? (newPost.file = req.file.filename) : null;
     await newPost.save();
     await slot.posts.push(newPost._id);
     await slot.save();
+
+    if (role === "teacher") {
+      const classroom = await Classroom.findById(classroomID).populate("students");
+      const notifications = classroom.students.map((student) => ({
+        recipient: student,
+        classroom: classroomID,
+        message: `Class ${classroom.title}: A new post by teacher has been added to slot:  ${slot.title}`,
+      }));
+
+      await Notification.insertMany(notifications);
+    }
+
     return res.status(200).json({ success: true, data: newPost });
   } catch (error) {
     return res.status(500).json({ message: error })
   }
 });
 
-const deletePost = asyncHandler(async (req, res, next) => {
+const deletePost = asyncHandler(async (req, res) => {
   try {
     const slot = req.slot;
     const post = req.post;
@@ -115,7 +130,7 @@ const sendPostFile = async (req, res, next) => {
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({ message: "File not found" });
     }
-    
+
     return res.status(200).sendFile(filePath);
   } catch (error) {
     console.log(error)
