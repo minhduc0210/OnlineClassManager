@@ -13,6 +13,11 @@ const notificationSchema = new Schema(
       ref: "Classroom", 
       required: true,
     },
+    slot: {
+      type: mongoose.Types.ObjectId,
+      ref: "Slot", 
+      required: true,
+    },
     message: {
       type: String,
       required: true,

@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useEffect, useContext, useState } from "react";
 import ReactMarkdown from "react-markdown"
-import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
+import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger, Spinner } from "react-bootstrap";
 import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsBySlot, fetchUpdatePost } from "../../services/PostService.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { GrDocumentDownload } from "react-icons/gr";
@@ -11,16 +11,37 @@ import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { postValidation } from "../../validations";
 import { useLocation, useParams } from "react-router-dom";
 import { fetchClassroomDetail } from "../../services/ClassroomService.js";
+import { fetchGetSlotById } from "../../services/SlotService.js";
 
 const Post = () => {
     const location = useLocation();
     const { classroomID, slotID } = useParams();
-    const { slotIndex, title, content } = location.state || {};
+    const { title: stateTitle, content: stateContent } = location.state || {};
+    const [slot, setSlot] = useState({ title: stateTitle, content: stateContent });
     const { posts, setPosts, user, classroom, setClassroom } = useContext(AuthContext);
     const [showPopover, setShowPopover] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [editingPost, setEditingPost] = useState({});
+
+    useEffect(() => {
+        const getSlotDetails = async () => {
+            try {
+                const data  = await fetchGetSlotById(slotID);
+                console.log(data)
+                setSlot({
+                    title: data.data.title,
+                    content: data.data.content
+                });
+            } catch (error) {
+                console.error("Error fetching slot details:", error);
+            }
+        };
+
+        if (!slot.title || !slot.content) {
+            getSlotDetails();
+        }
+    }, [slotID]);
 
     useEffect(() => {
         const getPostsBySlot = async () => {
@@ -60,6 +81,14 @@ const Post = () => {
         setShowModal(false);
     };
 
+    if (!posts || !user || !classroom) {
+        return (
+            <Container className="d-flex justify-content-center align-items-center" style={{ height: "100vh" }}>
+                <Spinner animation="border" variant="primary" />
+            </Container>
+        )
+    }
+
     const popover = (
         <Popover id="delete-popover">
             <Popover.Body>
@@ -89,10 +118,9 @@ const Post = () => {
         <Container>
             <Card className="shadow-sm p-3" style={{ backgroundColor: "#F7F7F7" }}>
                 <Card.Body>
-                    <Card.Title className="fs-3 fw-bold">Slot {slotIndex}</Card.Title>
-                    <Card.Subtitle className="mb-3 text-muted">{title}</Card.Subtitle>
+                    <Card.Title className="fs-3 fw-bold">{slot.title}</Card.Title>
                     <hr />
-                    <Card.Text>{content}</Card.Text>
+                    <Card.Text>{slot.content}</Card.Text>
                 </Card.Body>
             </Card>
 

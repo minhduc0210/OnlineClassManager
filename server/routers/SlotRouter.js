@@ -3,6 +3,11 @@ const { isAuth, isTeacher } = require("../middlewares/auth/auth");
 const { classroomCheck, postCheck, slotCheck } = require("../middlewares/checkExist/CheckExist");
 const slotController = require("../controllers/SlotController");
 
+router.get("/:slotID",
+    isAuth,
+    slotCheck,
+    slotController.getSlotById
+)
 router.post("/:classroomID",
     isAuth,
     isTeacher,

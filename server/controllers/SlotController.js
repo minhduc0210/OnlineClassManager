@@ -48,4 +48,12 @@ const updateSlot = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { createSlot, updateSlot };
+const getSlotById = async(req, res)=>{
+    try {
+        return res.status(200).json(req.slot) 
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+module.exports = { createSlot, updateSlot, getSlotById };

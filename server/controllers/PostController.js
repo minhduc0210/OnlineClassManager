@@ -30,6 +30,7 @@ const createPost = asyncHandler(async (req, res, next) => {
       const notifications = classroom.students.map((student) => ({
         recipient: student,
         classroom: classroomID,
+        slot: slot._id,
         message: `Class ${classroom.title}: A new post by teacher has been added to slot:  ${slot.title}`,
       }));
 

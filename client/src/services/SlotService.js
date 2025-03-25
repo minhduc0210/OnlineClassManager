@@ -1,6 +1,11 @@
 import { api } from "./AuthService";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
+export const fetchGetSlotById = async (slotID) => {
+  const result = await api.get(`${BASE_URL}/slots/${slotID}`);
+  return result;
+};
+
 export const fetchCreateSlot = async (classroomID, inputs) => {
   const result = await api.post(`${BASE_URL}/slots/${classroomID}`, inputs);
   return result;
