@@ -126,11 +126,13 @@ const Login = () => {
                             <Button size="lg" className="mt-3" type="submit" style={{ backgroundColor: "#1565C0", color: "white" }}>
                                 Login
                             </Button>
+                            {/* Forgot password                         
                             <div className="text-end mt-2">
                                 <Button variant="link" className="p-0" onClick={() => setShowResetModal(true)}>
                                     Forgot Password?
                                 </Button>
                             </div>
+                            */}
                         </div>
                     </Col>
                 </Form>

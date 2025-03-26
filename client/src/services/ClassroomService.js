@@ -20,7 +20,7 @@ export const fetchClassroomDetail = async (classroomID) => {
 };
 
 export const fetchUpdateClassroom = async (classroomID, inputs) => {
-  const result = await api.patch(
+  const result = await api.put(
     `${BASE_URL}/classrooms/${classroomID}`,
     inputs
   );
