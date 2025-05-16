@@ -73,3 +73,8 @@ export const fetchResetPassword = async (inputs) => {
   const result = await axios.post(`${BASE_URL}/users/reset-password`, inputs);
   return result;
 };
+
+export const fetchVerifyPassword = async (inputs) => {
+  const result = await axios.post(`${BASE_URL}/users/verify-password`, inputs);
+  return result;
+};

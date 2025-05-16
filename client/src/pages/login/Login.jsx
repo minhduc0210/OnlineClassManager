@@ -10,7 +10,7 @@ import {
 import { loginValidation } from "../../validations"
 import { useFormik } from "formik"
 import { useNavigate } from "react-router-dom"
-import { fetchLogin, fetchResetPassword } from "../../services/AuthService"
+import { fetchLogin, fetchResetPassword, fetchVerifyPassword } from "../../services/AuthService"
 import { toast } from "react-toastify"
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect, useState } from "react"
@@ -20,6 +20,9 @@ const Login = () => {
     const navigate = useNavigate();
     const [showResetModal, setShowResetModal] = useState(false);
     const [resetEmail, setResetEmail] = useState("");
+    const [step, setStep] = useState(1);
+    const [tempPassword, setTempPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
 
     useEffect(() => {
         if (user) {
@@ -42,39 +45,38 @@ const Login = () => {
                     navigate("/");
                 }
             } catch (err) {
-                if (err.response && err.response.data.errors) {
-                    const errorsArray = err.response.data.errors;
-                    if (errorsArray.length === 1 && errorsArray[0].msg === "Incorrect email or password") {
-                        toast.error("Incorrect email or password. Please try again.");
-                    } else {
-                        const errors = {};
-                        errorsArray.forEach(error => {
-                            errors[error.path] = error.msg;
-                        });
-                        bag.setErrors(errors);
-                    }
-                } else {
-                    toast.error("Something went wrong. Please try again later.");
-                }
+                toast.error("Incorrect email or password. Please try again.");
             }
         }
-        ,
     });
 
     const handleResetPassword = async () => {
         try {
             const response = await fetchResetPassword({ email: resetEmail });
-            console.log(response)
             if (response?.status === 200) {
-                toast.success("A new password has been sent to your email");
-                setShowResetModal(false);
-                setResetEmail("");
+                toast.success("A temporary password has been sent to your email");
+                setStep(2);
             } else {
                 toast.error("Error sending reset password email");
             }
         } catch (error) {
-            console.log(error)
             toast.error(error.response?.data?.message || "Error sending reset password email");
+        }
+    };
+
+    const handleVerifyPassword = async () => {
+        try {
+            const response = await fetchVerifyPassword({ email: resetEmail, tempPassword, newPassword });
+            if (response?.status === 200) {
+                toast.success("Password updated successfully! You can now log in.");
+                setShowResetModal(false);
+                setResetEmail("");
+                setStep(1);
+            } else {
+                toast.error("Verification failed. Please try again.");
+            }
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Error verifying password");
         }
     };
 
@@ -90,7 +92,6 @@ const Login = () => {
                 <h3 className="text-center mt-2 mb-4">Login Page</h3>
             </div>
 
-            {/* forms */}
             <Row>
                 <Form onSubmit={formik.handleSubmit}>
                     <Col md={{ span: 6, offset: 3 }}>
@@ -126,46 +127,72 @@ const Login = () => {
                             <Button size="lg" className="mt-3" type="submit" style={{ backgroundColor: "#1565C0", color: "white" }}>
                                 Login
                             </Button>
-                            {/* Forgot password                         
                             <div className="text-end mt-2">
                                 <Button variant="link" className="p-0" onClick={() => setShowResetModal(true)}>
                                     Forgot Password?
                                 </Button>
                             </div>
-                            */}
                         </div>
                     </Col>
                 </Form>
             </Row>
 
-            {/* Reset Password Modal */}
             <Modal show={showResetModal} onHide={() => setShowResetModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Reset Password</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form>
-                        <FloatingLabel label="Enter your email" className="mb-3" controlId="floatingResetEmail">
-                            <Form.Control
-                                type="email"
-                                placeholder="name@example.com"
-                                value={resetEmail}
-                                onChange={(e) => setResetEmail(e.target.value)}
-                            />
-                        </FloatingLabel>
-                        <div className="d-flex justify-content-end">
-                            <Button variant="secondary" onClick={() => setShowResetModal(false)} className="me-2">
-                                Cancel
-                            </Button>
-                            <Button variant="primary" onClick={handleResetPassword}>
-                                Reset Password
-                            </Button>
-                        </div>
-                    </Form>
+                    {step === 1 ? (
+                        <>
+                            <FloatingLabel label="Enter your email" className="mb-3" controlId="floatingResetEmail">
+                                <Form.Control
+                                    type="email"
+                                    placeholder="name@example.com"
+                                    value={resetEmail}
+                                    onChange={(e) => setResetEmail(e.target.value)}
+                                />
+                            </FloatingLabel>
+                            <div className="d-flex justify-content-end">
+                                <Button variant="secondary" onClick={() => setShowResetModal(false)} className="me-2">
+                                    Cancel
+                                </Button>
+                                <Button variant="primary" onClick={handleResetPassword}>
+                                    Send Temporary Password
+                                </Button>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <FloatingLabel label="Temporary Password" className="mb-3" controlId="floatingTempPassword">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Temporary Password"
+                                    value={tempPassword}
+                                    onChange={(e) => setTempPassword(e.target.value)}
+                                />
+                            </FloatingLabel>
+                            <FloatingLabel label="New Password" className="mb-3" controlId="floatingNewPassword">
+                                <Form.Control
+                                    type="password"
+                                    placeholder="New Password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                            </FloatingLabel>
+                            <div className="d-flex justify-content-end">
+                                <Button variant="secondary" onClick={() => setShowResetModal(false)} className="me-2">
+                                    Cancel
+                                </Button>
+                                <Button variant="success" onClick={handleVerifyPassword}>
+                                    Set New Password
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </Modal.Body>
             </Modal>
         </Container>
     );
 };
 
-export default Login
+export default Login;

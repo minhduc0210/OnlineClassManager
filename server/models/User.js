@@ -30,6 +30,10 @@ const UserSchema = new Schema({
     enum: ["student", "teacher"],
     default: "student",
   },
+  tempPassword: {
+    type: String,
+    default: null,
+  },
 });
 
 const User = mongoose.model("User", UserSchema, "users");

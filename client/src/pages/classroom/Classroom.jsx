@@ -72,7 +72,7 @@ const Classroom = () => {
             }
         } catch (err) {
             console.log(err);
-            toast.error(err)
+            toast.error(err.response?.data?.message || "Error creating slot!");
         }
     };
 

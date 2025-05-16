@@ -120,7 +120,7 @@ const changeInformation = asyncHandler(async (req, res) => {
       { name, lastname },
       { new: true }
     );
-    if (!user) return res.status(404).json({message: "Not found user!"})
+    if (!user) return res.status(404).json({ message: "Not found user!" })
     return res.status(200).json(user);
   } catch (error) {
     console.log(error)
@@ -176,7 +176,7 @@ const changePassword = asyncHandler(async (req, res) => {
 });
 
 const generateRandomPassword = () => {
-  return Math.random().toString(36).slice(-6); 
+  return Math.random().toString(36).slice(-6);
 };
 
 const resetPassword = asyncHandler(async (req, res) => {
@@ -184,20 +184,15 @@ const resetPassword = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({
-        message: "User not found!",
-      });
+      return res.status(400).json({ message: "User not found!" });
     }
 
-    // Tạo mật khẩu mới ngẫu nhiên
-    const newPassword = Math.random().toString(36).slice(-6);
-    
-    // Mã hóa mật khẩu mới
-    const hashedPassword = await hash(newPassword, 10);
-    user.password = hashedPassword;
-    await user.save();
+    // Tạo mật khẩu tạm thời
+    const tempPassword = generateRandomPassword();
+    user.tempPassword = tempPassword
+    await user.save()
 
-    // Cấu hình transport cho email
+    // Gửi email chứa mật khẩu tạm thời
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
@@ -206,25 +201,53 @@ const resetPassword = asyncHandler(async (req, res) => {
       },
     });
 
-    // Nội dung email
     const mailOptions = {
       to: user.email,
       from: process.env.EMAIL_USER,
-      subject: "Your New Password",
-      text: `Hello,\n\n`
-        + `Your password has been reset. Here is your new password:\n\n`
-        + `New Password: ${newPassword}\n\n`
-        + `Please log in and change your password as soon as possible.\n\n`
-        + `If you did not request this, please contact support immediately.`,
+      subject: "Your Temporary Password",
+      text: `Hello,\n\nYour temporary password is: ${tempPassword}\n\n`
+        + `Please use this password to verify and set a new password.\n\n`
+        + `If you did not request this, please ignore this email.`,
     };
 
     await transporter.sendMail(mailOptions);
-    return res.status(200).json({ message: "A new password has been sent to your email" });
+
+    // Gửi về client để frontend có thể kiểm tra mật khẩu này (không lưu vào DB)
+    return res.status(200).json({ tempPassword, message: "A temporary password has been sent to your email." });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+const verifyPassword = async(req, res)=>{
+  try {
+    const { email, tempPassword, newPassword } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found!" });
+    }
+
+    // Kiểm tra nếu người dùng không nhập đúng mật khẩu tạm thời (so sánh phía frontend)
+    if (!tempPassword) {
+      return res.status(400).json({ message: "Temporary password is required!" });
+    }
+
+    if (tempPassword !== user.tempPassword) {
+      return res.status(400).json({ message: "Wrong temp password!" });
+    }
+
+    // Cập nhật mật khẩu mới nếu mật khẩu tạm thời đúng
+    user.password = await hash(newPassword, 10);
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
 
 module.exports = {
   register,
@@ -234,5 +257,6 @@ module.exports = {
   changeInformation,
   getUserInformation,
   changePassword,
-  resetPassword
+  resetPassword,
+  verifyPassword
 };

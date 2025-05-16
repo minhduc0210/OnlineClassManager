@@ -9,6 +9,14 @@ const createSlot = asyncHandler(async (req, res) => {
         if (!classroom) {
             return res.status(404).json({ message: "Classroom not found" });
         }
+        const latestSlot = await Slot.findOne().sort({ startTime: -1 }).limit(1);
+
+        if (latestSlot && (new Date(latestSlot.startTime) > new Date(startTime) || new Date(latestSlot.endTime) > new Date(endTime))) {
+            return res.status(400).json({
+                status: 400,
+                message: "Cannot create slot because a later slot already exists.",
+            });
+        }
         const newSlot = await Slot.create({
             title,
             content,
