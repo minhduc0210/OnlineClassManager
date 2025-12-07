@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { useEffect, useContext, useState } from "react";
 import ReactMarkdown from "react-markdown"
-import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger } from "react-bootstrap";
+import { Modal, Button, Card, Col, Container, Form, Image, Row, Popover, OverlayTrigger, Badge } from "react-bootstrap";
 import { fetchCreatePost, fetchDeletePost, fetchDownloadPostFile, fetchPostsBySlot, fetchUpdatePost } from "../../services/PostService.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { GrDocumentDownload } from "react-icons/gr";
@@ -15,7 +15,7 @@ import { fetchClassroomDetail } from "../../services/ClassroomService.js";
 const Post = () => {
     const location = useLocation();
     const { classroomID, slotID } = useParams();
-    const { slotIndex, title, content } = location.state || {};
+    const { slotIndex, title, content, startTime, endTime } = location.state || {};
     const { posts, setPosts, user, classroom, setClassroom } = useContext(AuthContext);
     const [showPopover, setShowPopover] = useState(false);
     const [selectedPost, setSelectedPost] = useState(null);
